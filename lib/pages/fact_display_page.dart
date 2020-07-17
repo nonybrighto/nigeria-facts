@@ -57,7 +57,7 @@ class _FactDisplayPageState extends State<FactDisplayPage> {
                                   width: double.infinity,
                                   height: expandedHeight,
                                   decoration: BoxDecoration(
-                                      color: Colors.black26,
+                                      // color: Colors.black26,
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: AssetImage(

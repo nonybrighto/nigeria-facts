@@ -21,7 +21,7 @@ buildCustomAppBar({Widget title, List<Widget> actions}){
             child: GradientAppBar(
         title: title,
         actions: actions,
-        gradient: LinearGradient(colors: [kGradientFirstColor, kGradientSecondColor])
+        gradient: LinearGradient(colors: [kGradientFirstColor, kGradientSecondColor], tileMode: TileMode.mirror),
       )
           );
 }

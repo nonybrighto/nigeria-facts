@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dailyfactsng/bloc/bloc_provider.dart';
 import 'package:dailyfactsng/bloc/category_bloc.dart';
 import 'package:dailyfactsng/bloc/fact_bloc.dart';
-import 'package:dailyfactsng/constants/constants.dart';
 import 'package:dailyfactsng/models/category.dart';
 import 'package:dailyfactsng/models/fact.dart';
 import 'package:dailyfactsng/pages/fact_display_page.dart';
 import 'package:dailyfactsng/widgets/bookmark_button.dart';
 import 'package:dailyfactsng/widgets/share_button.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FactCard extends StatelessWidget {
   final Fact fact;
@@ -48,7 +46,7 @@ class FactCard extends StatelessWidget {
                             width: double.infinity,
                             height: imageHeight,
                             decoration: BoxDecoration(
-                                color: Colors.black26,
+                                // color: Colors.black54,
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: AssetImage(

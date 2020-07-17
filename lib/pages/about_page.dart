@@ -1,4 +1,5 @@
 import 'package:dailyfactsng/constants/constants.dart';
+import 'package:dailyfactsng/widgets/general/custom_app_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +8,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: buildCustomAppBar(
         title: Text('About $kAppName'),
       ),
       body: SingleChildScrollView(

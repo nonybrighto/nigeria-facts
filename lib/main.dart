@@ -23,8 +23,11 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
       title: 'DailyFactNG',
       theme: ThemeData(
-        primarySwatch: kPrimaryColor,
+        primarySwatch: Colors.green,
         scaffoldBackgroundColor: Color(0XFFFFFFFF),
+        iconTheme: IconThemeData(
+          color: Colors.red
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: TextTheme(
           bodyText2: TextStyle(color: kTextColor)

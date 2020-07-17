@@ -6,7 +6,7 @@ import 'package:dailyfactsng/widgets/nav_pages/home_fact_list.dart';
 import 'package:dailyfactsng/widgets/nav_pages/bookmark_list.dart';
 import 'package:dailyfactsng/widgets/nav_pages/category_list.dart';
 import 'package:dailyfactsng/widgets/nav_pages/settings.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -49,15 +49,15 @@ class _HomePageState extends State<HomePage> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.bookmark),
             title: Text('Bookmarks'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(FontAwesomeIcons.layerGroup),
             title: Text('Categories'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.settings),
             title: Text('Settings'),
           ),
         ],

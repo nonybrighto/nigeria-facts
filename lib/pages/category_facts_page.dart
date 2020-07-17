@@ -4,6 +4,7 @@ import 'package:dailyfactsng/helpers/database_helper.dart';
 import 'package:dailyfactsng/models/category.dart';
 import 'package:dailyfactsng/services/local/fact_local.dart';
 import 'package:dailyfactsng/widgets/fact_list.dart';
+import 'package:dailyfactsng/widgets/general/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class CategoryFactsPage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _CategoryFactsPageState extends State<CategoryFactsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.category.name),),
+      appBar: buildCustomAppBar(title: Text(widget.category.name),),
       body: BlocProvider<FactBloc>(
             bloc: _factBloc,
             child: FactList(),
