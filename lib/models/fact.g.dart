@@ -13,7 +13,7 @@ Fact _$FactFromJson(Map<String, dynamic> json) {
     summary: json['summary'] as String,
     description: json['description'] as String,
     imageUrl: json['imageUrl'] as String,
-    categoryId: json['categoryId'] as int,
+    categoryId: json['categoryId'] as String,
     isBookmarked: generateBoolFromInt(json['isBookmarked'] as int) ?? false,
     isViewed: generateBoolFromInt(json['isViewed'] as int) ?? false,
   );

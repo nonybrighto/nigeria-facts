@@ -4,6 +4,7 @@ import 'package:dailyfactsng/models/fact.dart';
 import 'package:dailyfactsng/models/fact_list_response.dart';
 import 'package:dailyfactsng/services/local/fact_local.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FactBloc extends ListBloc<Fact>{
  
@@ -11,6 +12,10 @@ class FactBloc extends ListBloc<Fact>{
  final FactListFetchType fetchType;
  final Category category;
  String searchTerm;
+
+  final _currentFactController = BehaviorSubject<Fact>();
+
+  Stream<Fact> get currentFact => _currentFactController.stream;
  
  FactBloc({this.factLocal, @required this.fetchType, this.category}){
           searchTerm  = '';
@@ -26,13 +31,18 @@ class FactBloc extends ListBloc<Fact>{
 
   searchFact(String searchTerm){
     this.searchTerm = searchTerm;
+    this.currentPage = 1;
     getItems();
   }
 
+  setCurrentFact(Fact fact){
+    _currentFactController.add(fact);
+  }
   toggleBookmark({Fact fact, Function(bool toggled) toggleCallback}) async{
      try{
       fact.isBookmarked  = !fact.isBookmarked;
       updateItem(fact);
+      _currentFactController.add(fact);
       await factLocal.toggleFactBookmark(fact.id, fact.isBookmarked);
       if(toggleCallback != null){
         toggleCallback(true);
@@ -40,6 +50,7 @@ class FactBloc extends ListBloc<Fact>{
      }catch(error){
       fact.isBookmarked  = !fact.isBookmarked;
       updateItem(fact);
+      _currentFactController.add(fact);
       if(toggleCallback != null){
         toggleCallback(true);
       }
@@ -67,7 +78,9 @@ class FactBloc extends ListBloc<Fact>{
   }
 
 
-  _dispose(){}
+  _dispose(){
+    _currentFactController.close();
+  }
 
   @override
   bool itemIdentificationCondition(Fact currentFact, Fact updatedFact) {

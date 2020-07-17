@@ -1,3 +1,4 @@
+import 'package:dailyfactsng/constants/constants.dart';
 import 'package:dailyfactsng/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dailyfactsng/widgets/nav_pages/home_fact_list.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => SearchPage()));
         })
       ],),
-      body: _navPages[_selectedIndex]['widget'],
+      body: Padding(padding: EdgeInsets.symmetric(horizontal: kDefaultPadding), child: _navPages[_selectedIndex]['widget'],),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -60,7 +61,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: kSecondaryColor,
+        unselectedItemColor: kTextColor,
         onTap: _onItemTapped,
       ),);
   }

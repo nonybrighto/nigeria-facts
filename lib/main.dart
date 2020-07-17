@@ -1,5 +1,6 @@
 import 'package:dailyfactsng/bloc/bloc_provider.dart';
 import 'package:dailyfactsng/bloc/category_bloc.dart';
+import 'package:dailyfactsng/constants/constants.dart';
 import 'package:dailyfactsng/helpers/database_helper.dart';
 import 'package:dailyfactsng/pages/home_page.dart';
 import 'package:dailyfactsng/services/local/fact_local.dart';
@@ -22,8 +23,12 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
       title: 'DailyFactNG',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: kPrimaryColor,
+        scaffoldBackgroundColor: Color(0XFFFFFFFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: TextTheme(
+          bodyText2: TextStyle(color: kTextColor)
+        )
       ),
       home: HomePage(),
     ),

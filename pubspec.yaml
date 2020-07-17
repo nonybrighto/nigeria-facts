@@ -30,6 +30,9 @@ dependencies:
   rxdart: ^0.24.1
   font_awesome_flutter: ^8.8.1
   gradient_app_bar: ^0.1.3
+  cached_network_image: ^2.2.0+1
+  url_launcher: ^5.5.0
+  webview_flutter: ^0.3.22+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -52,7 +55,8 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/database/dailyfactsngn.db
+    - assets/database/dailyfact.db
+    - assets/images/fact_place_holder.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

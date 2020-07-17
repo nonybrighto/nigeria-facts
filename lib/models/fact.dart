@@ -11,7 +11,7 @@ class Fact{
   String summary;
   String description;
   String imageUrl;
-  int categoryId;
+  String categoryId;
   @JsonKey(defaultValue: false, fromJson: generateBoolFromInt, toJson: generateIntFromBool)
   bool isBookmarked;
   @JsonKey(defaultValue: false, fromJson: generateBoolFromInt, toJson: generateIntFromBool)
