@@ -1,5 +1,6 @@
 import 'package:dailyfactsng/constants/constants.dart';
 import 'package:dailyfactsng/pages/search_page.dart';
+import 'package:dailyfactsng/widgets/general/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dailyfactsng/widgets/nav_pages/home_fact_list.dart';
 import 'package:dailyfactsng/widgets/nav_pages/bookmark_list.dart';
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GradientAppBar(title: Text(_navPages[_selectedIndex]['title']), actions: <Widget>[
+      appBar: buildCustomAppBar(title: Text(_navPages[_selectedIndex]['title']), actions: <Widget>[
         IconButton(icon: Icon(Icons.search), onPressed: (){
           Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => SearchPage()));

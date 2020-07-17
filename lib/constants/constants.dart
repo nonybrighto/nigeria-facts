@@ -6,6 +6,9 @@ const double kDefaultPadding = 10;
 
 
 //Fact constants
+const String kAppName = 'DailyFactsNG';
+const String kAppVersion = '1.0.0';
+const String kContactEmail = 'nonybrighto@gmail.com';
 const int kFactsPerDay = 10;
 
 
