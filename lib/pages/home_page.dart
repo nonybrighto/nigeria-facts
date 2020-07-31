@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             title: Text('Bookmarks'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.layerGroup),
+            icon: Icon(FontAwesomeIcons.layerGroup, size: 20,),
             title: Text('Categories'),
           ),
           BottomNavigationBarItem(

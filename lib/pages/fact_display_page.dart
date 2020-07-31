@@ -7,8 +7,8 @@ import 'package:dailyfactsng/models/fact_source.dart';
 import 'package:dailyfactsng/services/local/fact_local.dart';
 import 'package:dailyfactsng/widgets/bookmark_button.dart';
 import 'package:dailyfactsng/widgets/share_button.dart';
+import 'package:dailyfactsng/pages/web_view_page.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FactDisplayPage extends StatefulWidget {
   final Fact fact;
@@ -215,7 +215,11 @@ class _FactDisplayPageState extends State<FactDisplayPage> {
         ),
         onTap: source.link != null
             ? () {
-                launch(source.link);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => WebViewPage(
+                          title: source.title,
+                          url: source.link,
+                        )));
               }
             : null,
       ),
