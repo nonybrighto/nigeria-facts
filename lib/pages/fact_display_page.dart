@@ -91,6 +91,7 @@ class _FactDisplayPageState extends State<FactDisplayPage> {
                                         tag: 'shareButton' + fact.id,
                                         child: ShareButton(
                                           fact: fact,
+                                          factBloc: widget.factBloc,
                                         ),
                                       ),
                                       "Share")

@@ -33,6 +33,8 @@ dependencies:
   cached_network_image: ^2.2.0+1
   url_launcher: ^5.5.0
   webview_flutter: ^0.3.22+1
+  esys_flutter_share: ^1.0.2
+  flutter_cache_manager: ^1.4.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
