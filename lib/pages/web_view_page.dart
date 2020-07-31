@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dailyfactsng/widgets/general/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,17 +13,25 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-
   WebViewController _controller;
+  bool pageLoading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildCustomAppBar(title: Text(widget.title), actions: [
-        IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              _controller?.reload();
-            }),
+        pageLoading
+            ? Center(
+                child: Container(
+                  width: 20.0,
+                  height: 20.0,
+                  child: new CircularProgressIndicator(backgroundColor: Colors.white,),
+                ),
+              )
+            : IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  _controller?.reload();
+                }),
         IconButton(
             icon: Icon(Icons.web),
             onPressed: () {
@@ -33,11 +39,21 @@ class _WebViewPageState extends State<WebViewPage> {
             })
       ]),
       body: WebView(
-        initialUrl: 'http://'+'www.google.com',
+        initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
-            _controller = webViewController;
-          },
+          _controller = webViewController;
+        },
+        onPageStarted: (String url) {
+          setState(() {
+            pageLoading = true;
+          });
+        },
+        onPageFinished: (String url) {
+          setState(() {
+            pageLoading = false;
+          });
+        },
       ),
     );
   }
