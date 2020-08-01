@@ -3,17 +3,13 @@ import 'dart:collection';
 import 'package:dailyfactsng/models/load_state.dart';
 import 'package:dailyfactsng/widgets/general/main_error_display.dart';
 import 'package:flutter/material.dart';
-
-enum ScrollListType { grid, list }
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ScrollList<T> extends StatefulWidget {
   final Stream<LoadState> loadStateStream;
   final Stream<UnmodifiableListView<T>> listContentStream;
   final Function loadMoreAction;
   final Widget Function(T, int) currentListItemWidget;
-  final Widget Function(T, UnmodifiableListView<T>, int)
-      currentListItemWithListWidget; //widget that is displayed by comparing items between previous and current litsItem
-  final ScrollListType scrollListType;
   final int gridCrossAxisCount;
   final PageStorageKey pageStorageKey;
   final ScrollController scrollController;
@@ -24,18 +20,11 @@ class ScrollList<T> extends StatefulWidget {
       this.listContentStream,
       this.loadMoreAction,
       this.currentListItemWidget,
-      this.currentListItemWithListWidget,
-      @required this.scrollListType,
       this.gridCrossAxisCount,
       this.pageStorageKey,
       this.scrollController,
       })
-      : super(key: key) {
-    if (scrollListType == ScrollListType.grid && gridCrossAxisCount == null ||
-        gridCrossAxisCount != null && scrollListType != ScrollListType.grid) {
-      throw 'Grid should have a count or type should be grid';
-    }
-  }
+      : super(key: key);
 
   @override
   _ScrollListState<T> createState() => new _ScrollListState<T>();
@@ -74,7 +63,7 @@ class _ScrollListState<T> extends State<ScrollList<T>> {
           canLoadMore = false;
         }
 
-        if (loadState is Loading) {
+        if (loadState is Loading || loadState == null) {
           return _initialProgress();
         } else if (loadState is LoadError) {
           return _initialError(loadState.message, onRetry: () {
@@ -122,75 +111,42 @@ class _ScrollListState<T> extends State<ScrollList<T>> {
 
   _contentList(LoadState loadState, PageStorageKey pageStorageKey) {
     return StreamBuilder<UnmodifiableListView<T>>(
-      initialData: UnmodifiableListView([]),
       stream: widget.listContentStream,
       builder: (BuildContext context,
           AsyncSnapshot<UnmodifiableListView<T>> listItemSnapshot) {
         UnmodifiableListView<T> listItems = listItemSnapshot.data;
-        return (widget.scrollListType == ScrollListType.list)
-            ? _buildListView(loadState, listItems, pageStorageKey)
-            : _buildGridView(loadState, listItems);
+        if(listItems == null){
+          return Container();
+        }
+        return _buildListView(loadState, listItems, pageStorageKey);
       },
     );
   }
 
   _buildListView(LoadState loadState, UnmodifiableListView<T> listItems,
       PageStorageKey pageStorageKey) {
-    return ListView.builder(
-      key: pageStorageKey,
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      controller: _scrollController,
-      itemCount: (loadState is LoadingMore || loadState is LoadMoreError)
-          ? listItems.length + 1
-          : listItems.length,
-      itemBuilder: (BuildContext context, int index) {
-        if (index < listItems.length) {
-          if (widget.currentListItemWidget == null) {
-            return widget.currentListItemWithListWidget(listItems[index],
-                listItems, index);
-          }
-          return widget.currentListItemWidget(listItems[index], index);
-        } else if (loadState is LoadingMore) {
-          return _buildBottomProgress();
-        } else if (loadState is LoadMoreError) {
-          return _moreError(loadState.message, onRetry: () {
-            widget.loadMoreAction();
-          });
-        }
-        return null;
-      },
-    );
-  }
-
-  _buildGridView(LoadState loadState, UnmodifiableListView<T> listItems) {
-    return new CustomScrollView(
+    return AnimationLimiter(
+          child: ListView.builder(
+        key: pageStorageKey,
+        shrinkWrap: true,
         controller: _scrollController,
-        slivers: <Widget>[
-          SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: widget.gridCrossAxisCount,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  if (widget.currentListItemWidget == null) {
-                    return widget.currentListItemWithListWidget(listItems[index],
-                        listItems, index);
-                  }
-                  return widget.currentListItemWidget(listItems[index], index);
-                },
-                childCount: listItems.length,
-              )),
-          SliverToBoxAdapter(
-            child: (loadState is LoadingMore)
-                ? _buildBottomProgress()
-                : (loadState is LoadMoreError)
-                    ? _moreError(loadState.message, onRetry: () {
-                        widget.loadMoreAction();
-                      })
-                    : Container(),
-          ),
-        ]);
+        itemCount: (loadState is LoadingMore || loadState is LoadMoreError)
+            ? listItems.length + 1
+            : listItems.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index < listItems.length) {
+            return widget.currentListItemWidget(listItems[index], index);
+          } else if (loadState is LoadingMore) {
+            return _buildBottomProgress();
+          } else if (loadState is LoadMoreError) {
+            return _moreError(loadState.message, onRetry: () {
+              widget.loadMoreAction();
+            });
+          }
+          return Container();
+        },
+      ),
+    );
   }
 
   _buildBottomProgress() {

@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+ 
     return Scaffold(
       appBar: buildCustomAppBar(title: Text(_navPages[_selectedIndex]['title']), actions: <Widget>[
         IconButton(icon: Icon(Icons.search), onPressed: (){

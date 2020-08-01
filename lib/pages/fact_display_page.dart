@@ -9,6 +9,7 @@ import 'package:dailyfactsng/widgets/bookmark_button.dart';
 import 'package:dailyfactsng/widgets/share_button.dart';
 import 'package:dailyfactsng/pages/web_view_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class FactDisplayPage extends StatefulWidget {
   final Fact fact;
@@ -70,121 +71,120 @@ class _FactDisplayPageState extends State<FactDisplayPage> {
                         SliverToBoxAdapter(
                             child: Padding(
                           padding: const EdgeInsets.all(kDefaultPadding),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                          child: AnimationLimiter(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: AnimationConfiguration.toStaggeredList(
+                                duration: Duration(milliseconds: 500),
+                                childAnimationBuilder: (widget) =>
+                                    SlideAnimation(
+                                  horizontalOffset:
+                                      MediaQuery.of(context).size.width / 2,
+                                  child: FadeInAnimation(child: widget),
+                                ),
                                 children: <Widget>[
-                                  _buildIconWrap(
-                                      Hero(
-                                        tag: 'bookmarkButton' + fact.id,
-                                        child: BookmarkButton(
-                                            fact: fact,
-                                            factBloc: widget.factBloc,
-                                            dark: true),
-                                      ),
-                                      "Save"),
-                                  _buildIconWrap(
-                                      Hero(
-                                        tag: 'shareButton' + fact.id,
-                                        child: ShareButton(
-                                          fact: fact,
-                                          factBloc: widget.factBloc,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      _buildIconWrap(
+                                          Hero(
+                                            tag: 'bookmarkButton' + fact.id,
+                                            child: BookmarkButton(
+                                                fact: fact,
+                                                factBloc: widget.factBloc,
+                                                dark: true),
+                                          ),
+                                          "Save"),
+                                      _buildIconWrap(
+                                          Hero(
+                                            tag: 'shareButton' + fact.id,
+                                            child: ShareButton(
+                                              fact: fact,
+                                              factBloc: widget.factBloc,
+                                            ),
+                                          ),
+                                          "Share")
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    fact.description +
+                                        ' and this is the man that took the content from the place',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        gradient: LinearGradient(
+                                          colors: <Color>[
+                                            kGradientFirstColor,
+                                            kGradientSecondColor
+                                          ],
                                         ),
                                       ),
-                                      "Share")
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                fact.description +
-                                    ' and this is the man that took the content from the place',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              // RaisedButton(
-                              //     child: Container(
-                              //       decoration: const BoxDecoration(
-                              //         gradient: LinearGradient(
-                              //           colors: <Color>[
-                              //             kGradientFirstColor,
-                              //             kGradientSecondColor
-                              //           ],
-                              //         ),
-                              //       ),
-                              //       child: const Text('View Sources',
-                              //           style: TextStyle(fontSize: 20)),
-                              //     ),
-                              //     onPressed: () {
-                              //       setState(() {
-                              //         showSource = !showSource;
-                              //       });
-                              //     }),
-                              Center(
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    gradient: LinearGradient(
-                                      colors: <Color>[
-                                        kGradientFirstColor,
-                                        kGradientSecondColor
-                                      ],
-                                    ),
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.white,
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(30),
-                                        onTap: () {
-                                          setState(() {
-                                            showSource = !showSource;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 10),
-                                          child: Text(
-                                            'View Sources',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.white,
+                                        ),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            onTap: () {
+                                              setState(() {
+                                                showSource = !showSource;
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 10),
+                                              child: Text(
+                                                'View Sources',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              if (showSource)
-                                FutureBuilder<List<FactSource>>(
-                                    future:
-                                        FactLocal(dbHelper: DatabaseHelper())
+                                  if (showSource)
+                                    FutureBuilder<List<FactSource>>(
+                                        future: FactLocal(
+                                                dbHelper: DatabaseHelper())
                                             .getFactSources(widget.fact.id),
-                                    initialData: [],
-                                    builder: (context, factSourcesSnapshot) {
-                                      final factSources =
-                                          factSourcesSnapshot.data;
-                                      return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            ...factSources.map((source) =>
-                                                _buildSourceDisplay(source))
-                                          ]);
-                                    })
-                            ],
+                                        initialData: [],
+                                        builder:
+                                            (context, factSourcesSnapshot) {
+                                          final factSources =
+                                              factSourcesSnapshot.data;
+                                          return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                ...factSources.map((source) =>
+                                                    _buildSourceDisplay(source))
+                                              ]);
+                                        })
+                                ],
+                              ),
+                            ),
                           ),
                         ))
                       ],

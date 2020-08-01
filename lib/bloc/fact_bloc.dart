@@ -92,10 +92,14 @@ class FactBloc extends ListBloc<Fact> {
   }
 
   _setNotificationAlarm(int numberPerDay) async {
-    await AndroidAlarmManager.periodic(
+    if(numberPerDay > 0){
+      await AndroidAlarmManager.periodic(
         Duration(minutes: (24 * 60 / numberPerDay).ceil()),
         kFactAlarmId,
         displayNotification);
+    }else{
+       AndroidAlarmManager.cancel(kFactAlarmId);
+    }
   }
 
   searchFact(String searchTerm) {
