@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:dailyfactsng/bloc/list_bloc.dart';
 import 'package:dailyfactsng/constants/constants.dart';
 import 'package:dailyfactsng/models/category.dart';
@@ -11,25 +12,90 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../main.dart';
+
 class FactBloc extends ListBloc<Fact> {
   final FactLocal factLocal;
   final FactListFetchType fetchType;
   final Category category;
   String searchTerm;
+  bool singleItem;
 
   final _currentFactController = BehaviorSubject<Fact>();
+  final _showNotificationController = BehaviorSubject<bool>();
+  final _factsPerDayController = BehaviorSubject<int>();
 
   Stream<Fact> get currentFact => _currentFactController.stream;
+  Stream<bool> get showNotification => _showNotificationController.stream;
+  Stream<int> get factsPerDay => _factsPerDayController.stream;
 
-  FactBloc({this.factLocal, @required this.fetchType, this.category}) {
+  FactBloc(
+      {this.factLocal,
+      @required this.fetchType,
+      this.category,
+      this.singleItem = false}) {
     searchTerm = '';
-    getItems();
+    if (fetchType != null) {
+      getItems();
+    }
+    _init();
   }
 
   @override
   void dispose() {
     super.dispose();
     _dispose();
+  }
+
+  _init() async {
+    try {
+      if (!await factLocal.initialized()) {
+        await _setNotificationAlarm(await factLocal.getFactsPerDay());
+        factLocal.initialize();
+      }
+    } catch (error) {
+      print('init failed'); //log
+    }
+    _getshowNotification();
+    _getFactsPerDay();
+  }
+
+  _getshowNotification() async {
+    bool showNotification = await factLocal.getShowNotification();
+    _showNotificationController.add(showNotification);
+  }
+
+  _getFactsPerDay() async {
+    int factsPerDay = await factLocal.getFactsPerDay();
+    _factsPerDayController.add(factsPerDay);
+  }
+
+  void toggleShowNotification() async {
+    bool toggledValue = await factLocal.toggleShowNotification();
+    _showNotificationController.add(toggledValue);
+    if (toggledValue == false) {
+      AndroidAlarmManager.cancel(kFactAlarmId);
+    } else {
+      _setNotificationAlarm(await factLocal.getFactsPerDay());
+    }
+  }
+
+  void changeFactsPerDay(int newValue) async {
+    await factLocal.setFactsPerDay(newValue);
+    _factsPerDayController.add(newValue);
+
+    if (newValue > 0) {
+      _setNotificationAlarm(newValue);
+    } else {
+      AndroidAlarmManager.cancel(kFactAlarmId);
+    }
+  }
+
+  _setNotificationAlarm(int numberPerDay) async {
+    await AndroidAlarmManager.periodic(
+        Duration(minutes: (24 * 60 / numberPerDay).ceil()),
+        kFactAlarmId,
+        displayNotification);
   }
 
   searchFact(String searchTerm) {
@@ -45,7 +111,9 @@ class FactBloc extends ListBloc<Fact> {
   toggleBookmark({Fact fact, Function(bool toggled) toggleCallback}) async {
     try {
       fact.isBookmarked = !fact.isBookmarked;
-      updateItem(fact);
+      if (!singleItem) {
+        updateItem(fact);
+      }
       _currentFactController.add(fact);
       await factLocal.toggleFactBookmark(fact.id, fact.isBookmarked);
       if (toggleCallback != null) {
@@ -53,7 +121,9 @@ class FactBloc extends ListBloc<Fact> {
       }
     } catch (error) {
       fact.isBookmarked = !fact.isBookmarked;
-      updateItem(fact);
+      if (!singleItem) {
+        updateItem(fact);
+      }
       _currentFactController.add(fact);
       if (toggleCallback != null) {
         toggleCallback(false);
@@ -65,17 +135,17 @@ class FactBloc extends ListBloc<Fact> {
     String title, content = '';
     try {
       title = '${fact.title}';
-      content = '${fact.description} \n Get more amazing facts from $kAppName - $kStoreLink';
+      content =
+          '${fact.description} \n Get more amazing facts from $kAppName - $kStoreLink';
 
       final cacheManager = DefaultCacheManager();
       File file = await cacheManager.getSingleFile(fact.imageUrl);
       final fileBytes = await file.readAsBytes();
-      await Share.file(title, '$kAppName.jpg', fileBytes,
-          'image/jpg', text: content);
+      await Share.file(title, '$kAppName.jpg', fileBytes, 'image/jpg',
+          text: content);
       shareCallback(true);
     } on OSError {
-      Share.text(title,
-          content, 'text/plain');
+      Share.text(title, content, 'text/plain');
       shareCallback(true);
     } catch (error) {
       shareCallback(false);
@@ -103,6 +173,8 @@ class FactBloc extends ListBloc<Fact> {
 
   _dispose() {
     _currentFactController.close();
+    _factsPerDayController.close();
+    _showNotificationController.close();
   }
 
   @override

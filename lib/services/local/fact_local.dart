@@ -15,14 +15,36 @@ class FactLocal {
 
   FactLocal({this.dbHelper});
 
+
+  Future<bool> initialized() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(kInitializedPrefKey) ?? false;
+  }
+ 
+
+  Future<void> initialize() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setBool(kInitializedPrefKey, true);
+  }
+
   Future<void> setFactsPerDay(int factsPerDay) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setInt(kFactsPerDayPrefKey, factsPerDay);
+  }
+  Future<bool> toggleShowNotification() async {
+     SharedPreferences pref = await SharedPreferences.getInstance();
+    bool showNotification = await getShowNotification();
+    await pref.setBool(kShowNotificationPrefKey, !showNotification);
+    return !showNotification;
   }
 
   Future<int> getFactsPerDay() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getInt(kFactsPerDayPrefKey) ?? kFactsPerDay;
+  }
+  Future<bool> getShowNotification() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(kShowNotificationPrefKey) ?? true;
   }
 
   Future<FactListResponse> getBookMarkedFacts({int page}) async {
@@ -53,12 +75,30 @@ class FactLocal {
         page: page,
         errorMessage: 'Failed to get random facts');
   }
+
+  Future<Fact> getRandomFact() async {
+    Database db = await dbHelper.db;
+    final results = await db.rawQuery(
+      'SELECT * FROM Facts ORDER BY RANDOM() LIMIT 1',
+    );
+    return Fact.fromJson(results[0]);
+  }
+
+  Future<Fact> getFact(factId) async {
+      Database db = await dbHelper.db;
+      final results = await db.rawQuery(
+        'SELECT * FROM Facts WHERE id = ?', [factId]
+      );
+      return Fact.fromJson(results[0]);
+  }
+
   Future<FactListResponse> getCategoryFacts(
       {int page, Category category}) async {
     return _handleFactFetch(
         queryCallback: (db, limit, offset) {
           return Future.wait([
-            db.rawQuery('SELECT COUNT(*) FROM Facts WHERE categoryId = ${category.id}'),
+            db.rawQuery(
+                'SELECT COUNT(*) FROM Facts WHERE categoryId = ${category.id}'),
             db.rawQuery(
                 'SELECT * FROM Facts WHERE categoryId = ${category.id} ORDER BY RANDOM() LIMIT ? OFFSET ?',
                 [limit, offset])
@@ -67,12 +107,14 @@ class FactLocal {
         page: page,
         errorMessage: 'Failed to get random facts');
   }
+
   Future<FactListResponse> getSearchedFacts(
       {int page, String searchTerm}) async {
     return _handleFactFetch(
         queryCallback: (db, limit, offset) {
           return Future.wait([
-            db.rawQuery('SELECT COUNT(*) FROM Facts WHERE summary LIKE ?', ["%$searchTerm%"]),
+            db.rawQuery('SELECT COUNT(*) FROM Facts WHERE summary LIKE ?',
+                ["%$searchTerm%"]),
             db.rawQuery(
                 'SELECT * FROM Facts WHERE summary LIKE ? ORDER BY RANDOM() LIMIT ? OFFSET ?',
                 ["%$searchTerm%", limit, offset])
@@ -103,7 +145,8 @@ class FactLocal {
 
   Future<List<FactSource>> getFactSources(String factId) async {
     Database db = await dbHelper.db;
-    final sourcesMaps = await db.rawQuery("SELECT * FROM FactSources WHERE factId = $factId");
+    final sourcesMaps =
+        await db.rawQuery("SELECT * FROM FactSources WHERE factId = $factId");
     if (sourcesMaps.length > 0) {
       return sourcesMaps
           .map((sources) => FactSource.fromJson(sources))
