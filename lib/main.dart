@@ -57,11 +57,8 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final int helloAlarmID = 0;
   await AndroidAlarmManager.initialize();
-  // await AndroidAlarmManager.periodic(
-  //     const Duration(minutes: 1), helloAlarmID, displayNotification);
-  var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+  var initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
   var initializationSettings =
       InitializationSettings(initializationSettingsAndroid, null);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
