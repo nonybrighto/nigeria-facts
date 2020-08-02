@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DatabaseHelper {
   Database _db;
-  static const dbName = 'dailyfact.db';
+  static const dbName = 'nigerian_facts.db';
   static const int databaseVersion = 1;
 
   DatabaseHelper();

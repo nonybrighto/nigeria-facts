@@ -1,6 +1,7 @@
 import 'package:dailyfactsng/models/category.dart';
 import 'package:dailyfactsng/pages/category_facts_page.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoryCard extends StatelessWidget {
   final Category category;
@@ -16,7 +17,7 @@ class CategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
-                image: AssetImage(itemCategory.assetImage), fit: BoxFit.cover)),
+                image: AssetImage('assets/images/categories/'+itemCategory.assetImage), fit: BoxFit.cover)),
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -43,7 +44,7 @@ class CategoryCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Hello & welcome to it and here',
+                          category.name,
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -56,41 +57,64 @@ class CategoryCard extends StatelessWidget {
             )),
       ),
     );
-    // return InkWell(child: Text(category.name), onTap: (){
-    //    Navigator.of(context).push(MaterialPageRoute(
-    //             builder: (context) => CategoryFactsPage(category: category,)));
-    // },);
   }
 
   CategoryContent _getCategoryContents(String categoryId) {
     List<CategoryContent> contents = [
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
-          color: Colors.redAccent,
-          icon: Icons.chrome_reader_mode),
+          assetImage: 'people.jpg',
+          color: Colors.red,
+          icon: FontAwesomeIcons.users),
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
+          assetImage: 'science.jpg',
           color: Colors.blue,
-          icon: Icons.child_friendly),
+          icon: FontAwesomeIcons.flask),
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
-          color: Colors.redAccent,
-          icon: Icons.cloud_circle),
+          assetImage: 'politics.jpg',
+          color: Colors.green,
+          icon: FontAwesomeIcons.fistRaised),
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
-          color: Colors.redAccent,
-          icon: Icons.child_friendly),
+          assetImage: 'art.jpg',
+          color: Colors.yellow,
+          icon: FontAwesomeIcons.palette),
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
-          color: Colors.redAccent,
-          icon: Icons.child_friendly),
+          assetImage: 'history.jpg',
+          color: Colors.purple,
+          icon: FontAwesomeIcons.monument),
       CategoryContent(
-          assetImage: 'assets/images/fact_place_holder.png',
+          assetImage: 'places.jpg', //orange, green , purple, blue, yellow, red
           color: Colors.redAccent,
-          icon: Icons.child_friendly),
+          icon: FontAwesomeIcons.mapMarkerAlt),
+      CategoryContent(
+          assetImage: 'world.jpg',
+          color: Colors.green,
+          icon: FontAwesomeIcons.globeAfrica),
+      CategoryContent(
+          assetImage: 'agriculture.jpg',
+          color: Colors.blue,
+          icon: FontAwesomeIcons.pagelines),
+      CategoryContent(
+          assetImage: 'health.jpg',
+          color: Colors.yellow,
+          icon: FontAwesomeIcons.medkit),
+      CategoryContent(
+          assetImage: 'education.jpg',
+          color: Colors.tealAccent,
+          icon: FontAwesomeIcons.graduationCap),
+      CategoryContent(
+          assetImage: 'sports.jpg',
+          color: Colors.pink,
+          icon: FontAwesomeIcons.tableTennis),
+      CategoryContent(
+          assetImage: 'entertainment.jpg',
+          color: Colors.purple,
+          icon: FontAwesomeIcons.video),
+      CategoryContent(
+          assetImage: 'others.jpg',
+          color: Colors.blue,
+          icon: FontAwesomeIcons.doorClosed),
     ];
-
-    return contents[1];
+    return contents[int.parse(categoryId) - 1];
   }
 }
 

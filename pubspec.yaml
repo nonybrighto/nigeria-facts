@@ -60,9 +60,22 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/database/dailyfact.db
+    - assets/database/nigerian_facts.db
     - assets/images/fact_place_holder.png
     - assets/images/logo.png
+    - assets/images/categories/agriculture.jpg
+    - assets/images/categories/art.jpg
+    - assets/images/categories/education.jpg
+    - assets/images/categories/entertainment.jpg
+    - assets/images/categories/health.jpg
+    - assets/images/categories/history.jpg
+    - assets/images/categories/others.jpg
+    - assets/images/categories/people.jpg
+    - assets/images/categories/places.jpg
+    - assets/images/categories/politics.jpg
+    - assets/images/categories/science.jpg
+    - assets/images/categories/sports.jpg
+    - assets/images/categories/world.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
