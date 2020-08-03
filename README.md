@@ -8,6 +8,12 @@ A Project to display the basic facts about Nigeria. Can be modified to display o
 * Share facts with images
 * Bookmark Facts
 * Search Facts
+* View Source with WebView
+
+
+## Screenshots  
+
+<img src="screenshots/list.png" width="30%"/> <img src="screenshots/categories.png" width="30%"/><img src="screenshots/view.png" width="30%"/>
 
 ## Getting Started
 

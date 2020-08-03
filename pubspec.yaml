@@ -60,7 +60,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/database/nigerian_facts.db
+    - assets/database/facts.db
     - assets/images/fact_place_holder.png
     - assets/images/logo.png
     - assets/images/categories/agriculture.jpg
