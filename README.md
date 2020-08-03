@@ -1,6 +1,13 @@
-# dailyfactsng
+# Nigeria Facts
 
-A new Flutter project.
+A Project to display the basic facts about Nigeria. Can be modified to display other facts
+
+## Features
+
+* Fact periodic notifications
+* Share facts with images
+* Bookmark Facts
+* Search Facts
 
 ## Getting Started
 
