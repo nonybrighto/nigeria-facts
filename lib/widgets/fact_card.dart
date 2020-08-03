@@ -76,27 +76,29 @@ class FactCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                fact.title,
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w500),
-                              ),
-                              StreamBuilder<List<Category>>(
-                                  initialData: [],
-                                  stream: BlocProvider.of<CategoryBloc>(context)
-                                      .categories,
-                                  builder: (context, categoriesSnapshot) {
-                                    Category category = categoriesSnapshot.data
-                                        .firstWhere(
-                                            (cat) => cat.id == fact.categoryId,
-                                            orElse: () => null);
-                                    return Text(
-                                        category != null ? category.name : '');
-                                  }),
-                            ],
+                          Expanded(
+                                                      child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  fact.title,
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.w500),
+                                ),
+                                StreamBuilder<List<Category>>(
+                                    initialData: [],
+                                    stream: BlocProvider.of<CategoryBloc>(context)
+                                        .categories,
+                                    builder: (context, categoriesSnapshot) {
+                                      Category category = categoriesSnapshot.data
+                                          .firstWhere(
+                                              (cat) => cat.id == fact.categoryId,
+                                              orElse: () => null);
+                                      return Text(
+                                          category != null ? category.name : '');
+                                    }),
+                              ],
+                            ),
                           ),
                           Transform.translate(
                             offset: const Offset(15, 0),
